@@ -1,11 +1,13 @@
-package crudtac;
+package crudtac.uicontroller;
 
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValueProvider;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.Setter;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import crudtac.model.Car;
 import crudtac.model.Track;
 import crudtac.model.embedded.enums.AI;
@@ -55,6 +57,7 @@ public class CarEditor extends VerticalLayout {
         addComponents(name,transmission,aiUsage,valueOfSpeed,unitsOfSpeed,actions);
 
         binder.forField(name).bind(Car::getName, Car::setName);
+
         transmission.setItems(Arrays.stream(Transmission.values()).map(String::valueOf).collect(Collectors.toList()));
         binder.forField(transmission).bind((ValueProvider<Car, String>) car -> {
             if (car.getTransmission() == null) {
@@ -66,6 +69,7 @@ public class CarEditor extends VerticalLayout {
             if(!"".equals(s))
                 car.setTransmission(Transmission.valueOf(s));
         });
+
         aiUsage.setItems(Arrays.stream(AI.values()).map(String::valueOf).collect(Collectors.toList()));
         binder.forField(aiUsage).bind((ValueProvider<Car, String>) car -> {
             if (car.getAi() == null)
@@ -76,13 +80,23 @@ public class CarEditor extends VerticalLayout {
             if(!"".equals(s))
                 car.setAi(AI.valueOf(s));
         });
-        binder.forField(valueOfSpeed).bind((ValueProvider<Car, String>) car -> car.getMaxSpeed().getValue() == null ? "0.0" : car.getMaxSpeed().getValue().toString(), (Setter<Car, String>) (car, s) -> {
-            if(s.matches("\\d+\\.?\\d*")){
-                if(car.getMaxSpeed().getValue()!= null)
+
+        binder.forField(valueOfSpeed).bind(new ValueProvider<Car, String>() {
+            @Override
+            public String apply(Car car) {
+                if(car.getMaxSpeed() == null)
+                    return "0.0";
+                return String.valueOf(car.getMaxSpeed().getValue());
+            }
+        }, (Setter<Car, String>) (car, s) -> {
+            if (s.matches("\\d+\\.?\\d*")) {
+                if (car.getMaxSpeed()!= null)
                     car.getMaxSpeed().setValue(Double.parseDouble(s));
             }
         });
+
         unitsOfSpeed.setItems(Arrays.stream(UnitVelocity.values()).map(String::valueOf).collect(Collectors.toList()));
+
         binder.forField(unitsOfSpeed).bind((ValueProvider<Car, String>) car -> {
             if (car.getMaxSpeed() == null || car.getMaxSpeed().getUnit() == null) {
                 return "";
@@ -94,8 +108,8 @@ public class CarEditor extends VerticalLayout {
             }
         });
 
-        //save.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        //save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        save.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         setSpacing(true);
         System.out.println("CAR: + " + car);
 
@@ -130,13 +144,12 @@ public class CarEditor extends VerticalLayout {
         }
 
         cancel.setVisible(persisted);
-        binder.setBean(this.car);
+        if(this.car != null)
+         binder.setBean(this.car);
+
         setVisible(true);
-        System.out.println("Track  pered " + track);
-        System.out.println("CAR prosto car " + car);
-        System.out.println("CAR pered focus " + this.car);
         save.focus();
-        //name.selectAll();
+
     }
 
     public void createCar(Car car, Track track) {
@@ -153,7 +166,6 @@ public class CarEditor extends VerticalLayout {
         binder.setBean(car);
         setVisible(true);
         save.focus();
-        //name.selectAll();
     }
 
 

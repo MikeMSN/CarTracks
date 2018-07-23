@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class MaxSpeed implements Serializable{
     @JsonProperty
     @Column(precision=10, scale=3)
-    Double value;
+    double value;
 
 
     @JsonProperty
@@ -24,7 +24,7 @@ public class MaxSpeed implements Serializable{
 
     public MaxSpeed() {}
 
-    public MaxSpeed(Double v, UnitVelocity mps) {
+    public MaxSpeed(double v, UnitVelocity mps) {
         this.value = v;
         this.unit = mps;
     }
@@ -32,11 +32,11 @@ public class MaxSpeed implements Serializable{
 
 
 
-    public Double getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -46,5 +46,10 @@ public class MaxSpeed implements Serializable{
 
     public void setUnit(UnitVelocity unit) {
         this.unit = unit;
+    }
+
+    @Override
+    public String toString() {
+        return  value + " " + unit;
     }
 }

@@ -1,4 +1,4 @@
-package crudtac;
+package crudtac.uicontroller;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;

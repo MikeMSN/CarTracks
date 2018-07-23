@@ -1,4 +1,4 @@
-package crudtac;
+package crudtac.uicontroller;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
@@ -55,7 +55,9 @@ public class TrackUI extends UI {
         });
 
         // CREATE
-        addNewBtn.addClickListener(e -> editor.editTrack(new Track()));
+        addNewBtn.addClickListener(e -> {
+            cars.setVisible(false);
+            editor.editTrack(new Track());});
 
 
         editor.setChangeHandler(() -> {

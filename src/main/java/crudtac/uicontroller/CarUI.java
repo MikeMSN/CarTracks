@@ -1,4 +1,4 @@
-package crudtac;
+package crudtac.uicontroller;
 
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.SpringUI;
@@ -54,11 +54,10 @@ public class CarUI extends VerticalLayout {
         });
 
 
-        // CREATE
         addNewBtn.addClickListener(e -> {
             Car c = new Car();
             c.setTrack(this.track);
-            carEditor.editCar(new Car(), this.track);
+            carEditor.editCar(c, this.track);
         });
 
     }
